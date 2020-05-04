@@ -22,11 +22,11 @@ in2 = """
 out2 = 0
 
 MAX_SIZE = 999
-def gen_graph_with_path(p_edge = 0.5, has_path = True):
+def gen_graph(p_edge = 0.5, has_path = True):
     num_v = random.randint(2, MAX_SIZE)
     edges = []
 
-    # what path must exist?
+    # what are the start and end vertices of the path we're checking for?
     start = random.randint(1,num_v)
     end = start
     while start == end:
@@ -93,11 +93,12 @@ class TestReachability(unittest.TestCase):
             self.assertEqual(actual, expected)
     
     def test_generated_graphs(self):
+        print("\n")
         for i in range(100):
             p_edge=random.random() # random [0,1]
             has_path = random.choice([True, False])
-            num_v, edges, start, end, _  = gen_graph_with_path(p_edge, has_path)
-            print ("graph {:03} (has_path = {:1}, p_edge = {:.02f}, num_v = {:4}, num_e = {})".format(i, has_path, p_edge, num_v, len(edges)))
+            num_v, edges, start, end, _  = gen_graph(p_edge, has_path)
+            print ("graph {:03} (has_path = {:1}, p_edge = {:.02f}, num_v = {:4}, num_e = {:7})".format(i, has_path, p_edge, num_v, len(edges)))
             generated_input = graph_to_string(num_v, edges,start, end)
             # print(generated_input)
             adj, x, y = parse_input(generated_input)
