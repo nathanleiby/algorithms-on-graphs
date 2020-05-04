@@ -8,6 +8,7 @@ def reach(adj, x, y):
     to_visit = [x]
     while len(to_visit) > 0:
         cur = to_visit.pop()
+        visited[cur] = True
         if cur == y: # found
             return 1
         neighbors = adj[cur]
