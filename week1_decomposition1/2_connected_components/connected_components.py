@@ -5,13 +5,14 @@ import sys
 
 def number_of_components(adj):
     result = 0
-    print(adj)
+    #print(adj)
     visited = {}
     for idx in range(len(adj)):
         if idx in visited:
             continue
 
         # dfs another connected component
+        # print("DFS idx=", idx)
         result += 1
         vertices = get_vertices_in_component_containing_x(adj, idx)
         for v_idx in vertices:

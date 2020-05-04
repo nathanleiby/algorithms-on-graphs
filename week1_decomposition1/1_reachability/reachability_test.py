@@ -108,7 +108,6 @@ class TestReachability(unittest.TestCase):
 
 if __name__ == '__main__':
     seed = time.time()
-    seed = 1588570577.2125404 
     print("Random Seed = ", seed)
     random.seed(seed)
     unittest.main()
