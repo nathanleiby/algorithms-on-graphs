@@ -5,12 +5,36 @@ import sys
 
 def number_of_components(adj):
     result = 0
-    #write your code here
+    print(adj)
+    visited = {}
+    for idx in range(len(adj)):
+        if idx in visited:
+            continue
+
+        # dfs another connected component
+        result += 1
+        vertices = get_vertices_in_component_containing_x(adj, idx)
+        for v_idx in vertices:
+            visited[v_idx] = True
+
     return result
 
-if __name__ == '__main__':
-    input = sys.stdin.read()
-    data = list(map(int, input.split()))
+def get_vertices_in_component_containing_x(adj, x):
+    # do depth first search starting from vertex x
+    visited = {}
+    to_visit = [x]
+    while len(to_visit) > 0:
+        cur = to_visit.pop()
+        visited[cur] = True
+        neighbors = adj[cur]
+        unvisited_neighbors = filter(lambda x: x not in visited, neighbors)
+        to_visit.extend(unvisited_neighbors)
+
+    # return every visited node
+    return visited.keys()
+
+def parse_input(text):
+    data = list(map(int, text.split()))
     n, m = data[0:2]
     data = data[2:]
     edges = list(zip(data[0:(2 * m):2], data[1:(2 * m):2]))
@@ -18,4 +42,8 @@ if __name__ == '__main__':
     for (a, b) in edges:
         adj[a - 1].append(b - 1)
         adj[b - 1].append(a - 1)
+    return adj
+
+if __name__ == '__main__':
+    adj = parse_input(sys.stdin.read())
     print(number_of_components(adj))
