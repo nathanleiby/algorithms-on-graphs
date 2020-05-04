@@ -3,6 +3,17 @@
 import sys
 
 def reach(adj, x, y):
+    # do depth first search on an adjacency list
+    visited = {}
+    to_visit = [x]
+    while len(to_visit) > 0:
+        cur = to_visit.pop()
+        if cur == y: # found
+            return 1
+        neighbors = adj[cur]
+        unvisited_neighbors = filter(lambda x: x not in visited, neighbors)
+        to_visit.extend(unvisited_neighbors)
+
     return 0
 
 def parse_input(input):
