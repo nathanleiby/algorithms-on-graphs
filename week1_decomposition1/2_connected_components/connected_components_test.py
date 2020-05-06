@@ -98,4 +98,3 @@ if __name__ == '__main__':
     print("Random Seed = ", seed)
     random.seed(seed)
     unittest.main()
-    unittest.main()

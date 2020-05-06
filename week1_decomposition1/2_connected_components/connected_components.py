@@ -25,7 +25,9 @@ def get_vertices_in_component_containing_x(adj, x):
     visited = {}
     to_visit = [x]
     while len(to_visit) > 0:
-        cur = to_visit.pop()
+        # my guess is that this loop is quite slow for graphs with tons of edges
+        # .. it's doing an array pop() and an array filter() on large arrays (O(1M) items) 
+        cur = to_visit.pop() 
         visited[cur] = True
         neighbors = adj[cur]
         unvisited_neighbors = filter(lambda x: x not in visited, neighbors)
