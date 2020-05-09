@@ -11,19 +11,11 @@ def toposort(adj):
     # print("pre-visit:      ", bookkeeping['previsit'])
     # print("post-visit:     ", bookkeeping['postvisit'])
     pv = copy.copy(bookkeeping['postvisit'])
-    pv = list(reversed(sorted(pv))) # sort in descending order
-    # print("pv rev: ", pv)
+    pv_to_v = zip(pv, range(len(pv))) # map from postvisit to vertex id
+    pv_to_v = sorted(pv_to_v, key=lambda x: x[0], reverse=True) # sort (reverse) by postvisit
 
-    order = []
-    while len(pv) > 0 :
-        lowest = pv.pop() # remove last element, which is lowest
-        # print("lowest=", lowest)
-        v_idx = bookkeeping['postvisit'].index(lowest)
-        order.append(v_idx)
-
-    out = list(reversed(order))
-    # print('order:', out)
-    return out
+    order = list(map(lambda x: x[1], pv_to_v))
+    return order
 
 # TODO: idea... verify_toposort()
 # for a given output of toposort().. visit in order and makes each one you visit DOES NOT point back to an unvisited node
