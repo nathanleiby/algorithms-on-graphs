@@ -1,20 +1,40 @@
 #Uses python3
 
 import sys
-
-def dfs(adj, used, order, x):
-    #write your code here
-    pass
-
+import dfs
+import copy
 
 def toposort(adj):
-    used = [0] * len(adj)
-    order = []
-    #write your code here
-    return order
+    print("adj:\n", adj)
+    bookkeeping = dfs.dfs2(adj)
 
-if __name__ == '__main__':
-    input = sys.stdin.read()
+    print("pre-visit:      ", bookkeeping['previsit'])
+    print("post-visit:     ", bookkeeping['postvisit'])
+    pv = copy.copy(bookkeeping['postvisit'])
+    pv = list(reversed(sorted(pv))) # sort in descending order
+    print("pv rev: ", pv)
+
+    order = []
+    while len(pv) > 0 :
+        lowest = pv.pop() # remove last element, which is lowest
+        print("lowest=", lowest)
+        v_idx = bookkeeping['postvisit'].index(lowest)
+        order.append(v_idx)
+
+    out = list(reversed(order))
+    print('order:', out)
+    return out
+
+# TODO: idea... verify_toposort()
+# for a given output of toposort().. visit in order and makes each one you visit DOES NOT point back to an unvisited node
+
+
+def to_string(order):
+    # stringifies the output, as expected
+    add_one = list(map(lambda x: str(x + 1), order))
+    return " ".join(add_one)
+
+def parse_input(input):
     data = list(map(int, input.split()))
     n, m = data[0:2]
     data = data[2:]
@@ -22,6 +42,11 @@ if __name__ == '__main__':
     adj = [[] for _ in range(n)]
     for (a, b) in edges:
         adj[a - 1].append(b - 1)
+    return adj
+
+
+if __name__ == '__main__':
+    adj = parse_input(sys.stdin.read())
     order = toposort(adj)
     for x in order:
         print(x + 1, end=' ')

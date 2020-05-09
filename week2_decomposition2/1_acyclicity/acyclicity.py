@@ -1,49 +1,18 @@
 # Uses python3
 
 import sys
+import dfs
 
-
-class HasCycleException(Exception):
-    pass
-
-
-def acyclic(adj):
+def acyclic(adj, version=2):
     try:
-        dfs(adj)
-    except HasCycleException as e:
+        if version == 2:
+            dfs.dfs2(adj)
+        else:
+            dfs.dfs(adj)
+    except dfs.HasCycleException as e:
         # print(e)
         return 1
     return 0
-
-
-def dfs(adj):
-    """ dfs does a depth-first-search """
-    ## TODO: Randomize order that we traverse the nodes
-    visited = [False] * len(adj)
-    for v in range(len(adj)):
-        if visited[v]:
-            continue
-        explore(adj, visited, v, [v])
-
-    # we should have visited every vertex
-    assert all(visited)
-
-
-def explore(adj, visited, v, ancestors):
-    """ explore all vertices that can be reached from v, marking them as visited """
-    visited[v] = True
-    for neighbor in adj[v]:
-        if neighbor in ancestors:
-            # error if we find a back-edge, which indicates a cycle in a DAG
-            raise HasCycleException(
-                "Cycle found where {} has back-edge to {}".format(v, neighbor)
-            )
-        if not visited[neighbor]:
-            explore(adj, visited, neighbor, ancestors + [neighbor])
-
-    # we should have visited all neighbors of this vertex
-    assert (neighbor in visited for neighbor in adj[v])
-
 
 def parse_input(text):
     data = list(map(int, text.split()))
