@@ -1,6 +1,7 @@
 # Uses python3
 
 import sys
+import random
 
 
 class HasCycleException(Exception):
@@ -48,9 +49,9 @@ def dfs2(adj):
         # TODO: do i need this in addition to pre/post visit?
         visited=[False] * len(adj),
     )
-    # TODO: randomize
-    # for v in random.shuffle(range(len(adj))):
-    for v in range(len(adj)):
+    v_list = list(range(len(adj)))
+    random.shuffle(v_list)
+    for v in v_list:
         if bookkeeping['visited'][v]:
             continue
         explore2(adj, v, bookkeeping)
