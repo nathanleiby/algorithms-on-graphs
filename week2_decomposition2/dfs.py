@@ -39,9 +39,8 @@ def explore(adj, visited, v, ancestors):
 
 
 ## ALTERNATE IMPLEMENTATION, using pre-post visit
-def dfs2(adj):
-    """ dfs does a depth-first-search """
-    bookkeeping = dict(
+def new_bookkeeping(adj):
+    return dict(
         previsit=[0] * len(adj),
         postvisit=[0]*len(adj),
         counter=0,
@@ -49,12 +48,16 @@ def dfs2(adj):
         # TODO: do i need this in addition to pre/post visit?
         visited=[False] * len(adj),
     )
+
+def dfs2(adj, err_on_cycle=True):
+    """ dfs does a depth-first-search """
+    bookkeeping = new_bookkeeping(adj)
+
     v_list = list(range(len(adj)))
-    random.shuffle(v_list)
+    random.shuffle(v_list) # prove that order doesn't matter
     for v in v_list:
-        if bookkeeping['visited'][v]:
-            continue
-        explore2(adj, v, bookkeeping)
+        if not bookkeeping['visited'][v]:
+            explore2(adj, v, bookkeeping, err_on_cycle=err_on_cycle)
 
     # we should have visited every vertex
     assert all(bookkeeping['visited'])
@@ -65,18 +68,20 @@ def dfs2(adj):
 
     return bookkeeping
 
-def explore2(adj, v, bookkeeping):
+def explore2(adj, v, bookkeeping, err_on_cycle=True):
     """ explore all vertices that can be reached from v, marking them as visited """
     previsit(v, bookkeeping)
     bookkeeping['visited'][v] = True
-    for neighbor in adj[v]:
+    neighbors = adj[v]
+    random.shuffle(neighbors) # prove that order doesn't matter
+    for n in neighbors: 
         # error if we find a back-edge, which indicates a cycle in a DAG
-        if bookkeeping['previsit'][neighbor] > 0 and bookkeeping['postvisit'][neighbor] == 0:
+        if err_on_cycle and bookkeeping['previsit'][n] > 0 and bookkeeping['postvisit'][n] == 0:
             raise HasCycleException(
-                "Cycle found where {} has back-edge to {}".format(v, neighbor)
+                "Cycle found where {} has back-edge to {}".format(v, n)
             )
-        if not bookkeeping['visited'][neighbor]:
-            explore2(adj, neighbor, bookkeeping)
+        if not bookkeeping['visited'][n]:
+            explore2(adj, n, bookkeeping, err_on_cycle)
 
     # we should have visited all neighbors of this vertex
     assert (neighbor in bookkeeping['visited'] for neighbor in adj[v])
