@@ -28,26 +28,8 @@ def number_of_strongly_connected_components(adj):
     adj_r = reverse_graph(adj)
     order = toposort(adj_r) 
 
-    ## -------------
-    # TODO: TLDR Don't use toposort, b/c we cant toposort a non-DAG (!) but SCCs are only of interest in a non-DAG to create the meta-graph (a DAG)
-    def is_toposort(adj, order):
-        visited = [False] * len(adj)
-        for o in order:
-            # it should not have any inbound edges from an unvisited node
-            for v, edges in enumerate(adj):
-                if not visited[v] and o in edges:
-                    return False
-            visited[o] = True
-
-        return True
-    ## -------------
-
-
-    print("is_toposort = ", is_toposort(adj_r, order))
-    print("Order:")
-    print(order)
-
     bk = dfs.new_bookkeeping(adj)
+    previously_visited = []
     sccs = [] 
     # for each v in in G_r in descending post-visit order... (source in G_r <=> sink in G)
     for v in order:
@@ -55,15 +37,14 @@ def number_of_strongly_connected_components(adj):
             continue
         # dfs original graph
         dfs.explore2(adj, v, bookkeeping=bk, err_on_cycle=False)
+
         # add any newly visited nodes to a new SCC
         new_scc = []
-        previously_visited = []
-        for s in sccs:
-            previously_visited += s
         for v, is_visited in enumerate(bk['visited']):
             if is_visited and not v in previously_visited:
                 new_scc.append(v)
         sccs.append(new_scc)
+        previously_visited.extend(new_scc)
 
     print("Sccs:")
     print(sccs)
@@ -71,7 +52,7 @@ def number_of_strongly_connected_components(adj):
     return len(sccs)
 
 def reverse_graph(adj):
-    print("reverse_graph")
+    print("reverse_graph()")
     print("ADJ:")
     print(adj)
 
