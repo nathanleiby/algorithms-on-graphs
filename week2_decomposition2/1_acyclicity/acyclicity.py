@@ -3,6 +3,7 @@
 import sys
 import dfs
 
+
 def acyclic(adj, version=2):
     try:
         if version == 2:
@@ -13,6 +14,7 @@ def acyclic(adj, version=2):
         # print(e)
         return 1
     return 0
+
 
 def parse_input(text):
     data = list(map(int, text.split()))

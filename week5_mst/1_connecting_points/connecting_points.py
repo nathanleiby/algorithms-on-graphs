@@ -1,14 +1,15 @@
-#Uses python3
+# Uses python3
 import sys
 import math
 
+
 def minimum_distance(x, y):
-    result = 0.
-    #write your code here
+    result = 0.0
+    # write your code here
     return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     input = sys.stdin.read()
     data = list(map(int, input.split()))
     n = data[0]

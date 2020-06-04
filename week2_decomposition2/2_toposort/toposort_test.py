@@ -44,7 +44,7 @@ class ToposortTest(unittest.TestCase):
         self.assertTrue(is_toposort(adj1, order1))
 
         # double-check that is_toposort works and returns False for an invalid order
-        self.assertFalse(is_toposort(adj1, [1,2,3,4])) 
+        self.assertFalse(is_toposort(adj1, [1, 2, 3, 4]))
 
         in2 = """
         4 1
@@ -72,13 +72,12 @@ class ToposortTest(unittest.TestCase):
         order3 = toposort(adj3)
         self.assertTrue(is_toposort(adj3, order3))
 
-
     def test_generated(self):
         # for i in range(100): # i in range(100) .. together take ~25s to run
         # i = 200 takes ~7s to run
         for i in range(70):  # i in range(70) .. takes ~7s total to run
             adj = gen_graph(num_vertices=10 * i)
-            num_edges = 0 
+            num_edges = 0
             for a in adj:
                 num_edges += len(a)
             print("n={} m={}".format(len(adj), num_edges))
