@@ -13,6 +13,7 @@ def shortest_paths(adj, cost, s):
     distance, _ = bellman_ford(adj, cost, s)
     return distance
 
+
 def parse_input(text):
     data = list(map(int, text.split()))
     n, m = data[0:2]
@@ -29,6 +30,7 @@ def parse_input(text):
     s = data[0]
     s -= 1
     return adj, cost, s
+
 
 if __name__ == "__main__":
     adj, cost, s = parse_input(sys.stdin.read())

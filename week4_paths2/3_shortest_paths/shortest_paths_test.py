@@ -32,10 +32,12 @@ in2 = """
 """
 out2 = [-math.inf, -math.inf, -math.inf, 0, math.inf]
 
+
 class Test(unittest.TestCase):
     def test_examples(self):
         self.assertEqual(shortest_paths(*parse_input(in1)), out1)
         self.assertEqual(shortest_paths(*parse_input(in2)), out2)
+
 
 if __name__ == "__main__":
     seed = time.time()

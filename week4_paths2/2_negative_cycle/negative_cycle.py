@@ -14,9 +14,12 @@ def relax(adj, cost, distance, prev, loop_check=False):
             relaxed_cost = distance[v] + c
             if relaxed_cost < distance[neighbor]:
                 if loop_check:
-                    relaxed_cost = -math.inf # there's a negative loop including this vertex
+                    relaxed_cost = (
+                        -math.inf
+                    )  # there's a negative loop including this vertex
                 distance[neighbor] = relaxed_cost
                 prev[neighbor] = v
+
 
 def bellman_ford(adj, cost, s):
     # This algo will give us two results:
@@ -55,7 +58,7 @@ def bellman_ford(adj, cost, s):
             distance[cur] = -math.inf
             if cur == d:
                 break
-    
+
     return distance, prev
 
 
