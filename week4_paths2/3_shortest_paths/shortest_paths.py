@@ -1,17 +1,20 @@
 # Uses python3
 
+import math
 import sys
-import queue
 
+from negative_cycle import bellman_ford
 
-def shortet_paths(adj, cost, s, distance, reachable, shortest):
-    # write your code here
-    pass
+# returns an array of distances to each vertex from s
+#
+# if not reachable, distance=math.inf
+# if not shortest path, distance=-math.inf
+def shortest_paths(adj, cost, s):
+    distance, _ = bellman_ford(adj, cost, s)
+    return distance
 
-
-if __name__ == "__main__":
-    input = sys.stdin.read()
-    data = list(map(int, input.split()))
+def parse_input(text):
+    data = list(map(int, text.split()))
     n, m = data[0:2]
     data = data[2:]
     edges = list(
@@ -25,14 +28,18 @@ if __name__ == "__main__":
         cost[a - 1].append(w)
     s = data[0]
     s -= 1
-    distance = [10 ** 19] * n
-    reachable = [0] * n
-    shortest = [1] * n
-    shortet_paths(adj, cost, s, distance, reachable, shortest)
-    for x in range(n):
-        if reachable[x] == 0:
+    return adj, cost, s
+
+if __name__ == "__main__":
+    adj, cost, s = parse_input(sys.stdin.read())
+    out = shortest_paths(adj, cost, s)
+    for x in out:
+        if x == math.inf:
+            # not reachable
             print("*")
-        elif shortest[x] == 0:
+        elif x == -math.inf:
+            # no shortest path (b/c inf loop)
             print("-")
         else:
-            print(distance[x])
+            # path length
+            print(x)

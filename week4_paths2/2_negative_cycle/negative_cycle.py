@@ -5,22 +5,18 @@ import random
 import sys
 
 # relax modifies the distances, if possible
-def relax(adj, cost, distance, prev):
-    update_occurred = False
-
+def relax(adj, cost, distance, prev, loop_check=False):
     # for each vertex
     for v in range(len(adj)):
-        # relax neighbors
+        # check for shortest path to neighbors
         for idx, neighbor in enumerate(adj[v]):
             c = cost[v][idx]
             relaxed_cost = distance[v] + c
             if relaxed_cost < distance[neighbor]:
-                update_occurred = True
+                if loop_check:
+                    relaxed_cost = -math.inf # there's a negative loop including this vertex
                 distance[neighbor] = relaxed_cost
                 prev[neighbor] = v
-
-    return update_occurred
-
 
 def bellman_ford(adj, cost, s):
     # This algo will give us two results:
@@ -37,15 +33,30 @@ def bellman_ford(adj, cost, s):
 
     # for |vertex|+1 rounds...
     for _ in range(len(adj) - 1):
-        print(distance)
-        did_relax = relax(adj, cost, distance, prev)
-        if not did_relax:
-            # exit early
-            print("exit early")
-            return distance, False
+        relax(adj, cost, distance, prev)
 
-    has_negative_cycle = relax(adj, cost, distance, prev)
-    return distance, has_negative_cycle
+    # one more relax, to check for cycles
+    relax(adj, cost, distance, prev, loop_check=True)
+
+    # Check if any vertex is part of a negative cycle
+    if -math.inf in distance:
+        d = distance.index(-math.inf)
+        # now that we've found a single node that's part of a negative cycle,
+        # we need to figure out the remaining nodes
+        #
+        # From lecture notes...
+        #  Start from x ← v, follow the link
+        #  x ← prev[x] for |V | times — will be
+        #  definitely on the cycle
+        cur = d
+        for _ in range(len(adj)):
+            # step back one node
+            cur = prev[cur]
+            distance[cur] = -math.inf
+            if cur == d:
+                break
+    
+    return distance, prev
 
 
 # return 1 if graph has negative cycle and 0 if not
@@ -55,7 +66,8 @@ def negative_cycle(adj, cost):
     vertices = list(range(len(adj)))
     start_v = random.choice(vertices)
 
-    _, has_negative_cycle = bellman_ford(adj, cost, start_v)
+    distance, _ = bellman_ford(adj, cost, start_v)
+    has_negative_cycle = -math.inf in distance
 
     return int(has_negative_cycle)
 
