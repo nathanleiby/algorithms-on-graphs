@@ -21,7 +21,7 @@ in2 = """
 """
 out2 = 0
 
-MAX_SIZE = 999
+MAX_SIZE = 500
 
 
 def gen_graph(p_edge=0.5, has_path=True):

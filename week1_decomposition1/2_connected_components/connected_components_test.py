@@ -21,7 +21,7 @@ def gen_graph():
     num_v = random.randint(2, MAX_SIZE)
     edges = []
 
-    vertices = range(1, num_v + 1)
+    vertices = list(range(1, num_v + 1))
     random.shuffle(vertices)
 
     # 1 is fully connected, num_v would be no edges
@@ -34,8 +34,7 @@ def gen_graph():
     #   Split Idxs   = [ 1, 4 ]            # These are the indices to split before
     # Then:
     #   Components = [4], [2,3,5], [1]
-    chosen_splits = []
-    split_idxs = range(1, num_v)
+    split_idxs = list(range(1, num_v))
     random.shuffle(split_idxs)
     chosen_split_idxs = split_idxs[: num_components - 1]
     chosen_split_idxs.sort()
