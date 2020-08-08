@@ -5,6 +5,7 @@ import random
 import sys
 
 # relax modifies the distances, if possible
+# TODO: refactor with dijkstra?
 def relax(adj, cost, distance, prev, loop_check=False):
     # for each vertex
     for v in range(len(adj)):
@@ -34,7 +35,7 @@ def bellman_ford(adj, cost, s):
         prev.append(None)
     distance[s] = 0
 
-    # for |vertex|+1 rounds...
+    # for |vertex|-1 rounds...
     for _ in range(len(adj) - 1):
         relax(adj, cost, distance, prev)
 

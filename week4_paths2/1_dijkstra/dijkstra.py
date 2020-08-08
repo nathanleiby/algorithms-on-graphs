@@ -22,18 +22,18 @@ def distance(adj, cost, s, t):
     current = s
     distance[s] = 0
 
-    # while known region doesn't include all nodes
+    # while known region doesn't include all nodes/vertices
     while len(known_region) < len(adj):
         logging.debug(
             "Current vertex: {} (dist = {})".format(current, distance[current])
         )
 
-        # visit all of current's vertexes unexplored neighbors
+        # visit all of current vertex's neighbors
         for idx, neighbor in enumerate(adj[current]):
             c = cost[current][idx]
             logging.debug("\t{} => {} ... cost = {}".format(current, neighbor, c))
 
-            # update distances, if better path found
+            # update distances, if better path found ("relax")
             distance_via_current = distance[current] + c
             if distance_via_current < distance[neighbor]:
                 distance[neighbor] = distance_via_current
@@ -42,6 +42,8 @@ def distance(adj, cost, s, t):
         known_region.add(current)
 
         # find the unexplored node with the minimum distance and set it to current
+        # "extract_min"...
+        # TODO: consider optimizing perf via priority queue https://docs.python.org/3/library/heapq.html
         logging.debug("Distances after update:")
         logging.debug(distance)
 
