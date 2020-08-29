@@ -3,6 +3,7 @@ import sys
 import math
 from connecting_points import build_graph, mst
 
+
 def get_edge_cost(adj, costs, e):
     src, dst = e[0], e[1]
     edges_from_src = adj[src]
@@ -10,13 +11,13 @@ def get_edge_cost(adj, costs, e):
 
     return costs[src][dst_idx]
 
+
 def clustering(x, y, k):
     """
     @param x: the x-coords of the points
     @param y: the y-coords of the points
     @param k: number of non-empty subsets (clusters)
     """
-
 
     # make a graph
     adj, costs = build_graph(x, y)
@@ -26,7 +27,7 @@ def clustering(x, y, k):
 
     # sort the edges by decreasing weight
     print("EDGE COSTS")
-    ecosts =list(map(lambda e: get_edge_cost(adj, costs, e), edges))
+    ecosts = list(map(lambda e: get_edge_cost(adj, costs, e), edges))
     ecosts_sorted = list(sorted(list(ecosts), reverse=True))
     print(ecosts_sorted)
 
@@ -34,8 +35,9 @@ def clustering(x, y, k):
     #
     # if you cut out (k-1) edges, you'll divide graph into (k)
     # non-empty connected components.
-    c = ecosts_sorted[(k-1)-1] # other (-1) is to handle 0-indexing of array
-    return round(c, 7) # answer expected at this precision level
+    c = ecosts_sorted[(k - 1) - 1]  # other (-1) is to handle 0-indexing of array
+    return round(c, 7)  # answer expected at this precision level
+
 
 def parse_input(input):
     data = list(map(int, input.split()))
@@ -45,7 +47,8 @@ def parse_input(input):
     y = data[1 : 2 * n : 2]
     data = data[2 * n :]
     k = data[0]
-    return x,y,k
+    return x, y, k
+
 
 if __name__ == "__main__":
     input = sys.stdin.read()

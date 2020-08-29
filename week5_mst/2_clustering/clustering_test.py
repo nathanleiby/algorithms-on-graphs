@@ -40,6 +40,7 @@ out2 = round(5.000000000, 7)
 # TODO: Try running some tests at scale.
 # 1 ≤ 𝑛 ≤ 200; −10**3 ≤ 𝑥𝑖, 𝑦𝑖 ≤ 10**3 are integers.
 
+
 class Test(unittest.TestCase):
     def test_examples(self):
         self.assertEqual(clustering(*parse_input(in1)), out1)
@@ -51,4 +52,3 @@ if __name__ == "__main__":
     print("random seed = ", seed)
     random.seed(seed)
     unittest.main()
-

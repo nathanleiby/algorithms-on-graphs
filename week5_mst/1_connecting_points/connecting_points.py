@@ -3,10 +3,12 @@ import sys
 import math
 import random
 
-def euclidean_distance(p1, p2):
-    return math.sqrt( (p1[0]-p2[0]) ** 2 + (p1[1]-p2[1]) ** 2 )
 
-def build_graph(x,y):
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+
+def build_graph(x, y):
     # build the graph -- create the nodes and edge lengths
     # it's a fully connected graph
     vertices = []
@@ -29,7 +31,7 @@ def build_graph(x,y):
     # This is the first problem where we had to build the graph
     # vs just getting it in adjacency list format.
     for i in range(len(vertices)):
-        for j in range(i+1, len(vertices)):
+        for j in range(i + 1, len(vertices)):
             src = vertices[i]
             dst = vertices[j]
             adj[i].append(j)
@@ -37,11 +39,13 @@ def build_graph(x,y):
 
     return adj, costs
 
-def mst(adj, costs, algo='prim'):
-    if algo == 'prim':
+
+def mst(adj, costs, algo="prim"):
+    if algo == "prim":
         return prim(adj, costs)
     else:
         return kruskal(adj, costs)
+
 
 def _get_lightest_edge(adj, costs, mst_v):
     """ Gets the lightest edge to a new vertex,
@@ -66,10 +70,11 @@ def _get_lightest_edge(adj, costs, mst_v):
 
     return min_edge, min_cost
 
+
 def prim(adj, costs):
     # "repeatedly attach a new vertex to the tree by the lightest edge"
     mst_v = set()
-    mst_e = set() # TODO: Do we care about tracking the edges in this tree
+    mst_e = set()  # TODO: Do we care about tracking the edges in this tree
     total_cost = 0
 
     # initialize with a random starting vertex
@@ -85,20 +90,24 @@ def prim(adj, costs):
 
     return total_cost, mst_e
 
+
 def kruskal(adj, costs):
     # "repeatedly add the next lightest edge that doesn't produce a cycle"
     return []
+
 
 def minimum_distance(x, y):
     adj, costs = build_graph(x, y)
     total_cost, _ = mst(adj, costs)
     return round(total_cost, 9)
 
+
 def parse_input(text):
     data = list(map(int, text.split()))
     x = data[1::2]
     y = data[2::2]
     return x, y
+
 
 if __name__ == "__main__":
     x, y = parse_input(sys.stdin.read())

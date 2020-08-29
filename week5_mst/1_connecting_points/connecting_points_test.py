@@ -27,6 +27,7 @@ out2 = 7.064495102
 # TODO: Try running some tests at scale.
 # 1 ≤ 𝑛 ≤ 200; −10**3 ≤ 𝑥𝑖, 𝑦𝑖 ≤ 10**3 are integers.
 
+
 class Test(unittest.TestCase):
     def test_examples(self):
         self.assertEqual(minimum_distance(*parse_input(in1)), out1)
