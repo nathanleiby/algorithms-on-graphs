@@ -42,6 +42,7 @@ out2 = round(5.000000000, 7)
 # −10**3 ≤ 𝑥𝑖, 𝑦𝑖 ≤ 10**3 are integers.
 # All points are pairwise different
 
+
 class Test(unittest.TestCase):
     def test_examples(self):
         self.assertEqual(clustering(*parse_input(in1)), out1)
