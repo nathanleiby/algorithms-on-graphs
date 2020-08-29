@@ -83,7 +83,7 @@ def prim(adj, costs):
         mst_e.add(edge)
         total_cost += cost
 
-    return total_cost
+    return total_cost, mst_e
 
 def kruskal(adj, costs):
     # "repeatedly add the next lightest edge that doesn't produce a cycle"
@@ -91,7 +91,7 @@ def kruskal(adj, costs):
 
 def minimum_distance(x, y):
     adj, costs = build_graph(x, y)
-    total_cost = mst(adj, costs)
+    total_cost, _ = mst(adj, costs)
     return round(total_cost, 9)
 
 def parse_input(text):

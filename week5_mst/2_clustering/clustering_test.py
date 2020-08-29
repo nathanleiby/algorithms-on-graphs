@@ -1,4 +1,4 @@
-from connecting_points import minimum_distance, parse_input
+from clustering import clustering, parse_input
 
 import unittest
 import random
@@ -6,31 +6,44 @@ import time
 import math
 
 in1 = """
-4
-0 0
-0 1
-1 0
-1 1
+12
+7 6
+4 3
+5 1
+1 7
+2 7
+5 7
+3 3
+7 8
+2 8
+4 4
+6 7
+2 6
+3
 """
-out1 = 3
+out1 = round(2.828427124746, 7)
 
 in2 = """
-5
-0 0
-0 2
-1 1
-3 0
-3 2
+8
+3 1
+1 2
+4 6
+9 8
+9 9
+8 9
+3 11
+4 12
+4
 """
-out2 = 7.064495102
+out2 = round(5.000000000, 7)
 
 # TODO: Try running some tests at scale.
 # 1 ≤ 𝑛 ≤ 200; −10**3 ≤ 𝑥𝑖, 𝑦𝑖 ≤ 10**3 are integers.
 
 class Test(unittest.TestCase):
     def test_examples(self):
-        self.assertEqual(minimum_distance(*parse_input(in1)), out1)
-        self.assertEqual(minimum_distance(*parse_input(in2)), out2)
+        self.assertEqual(clustering(*parse_input(in1)), out1)
+        self.assertEqual(clustering(*parse_input(in2)), out2)
 
 
 if __name__ == "__main__":
@@ -38,3 +51,4 @@ if __name__ == "__main__":
     print("random seed = ", seed)
     random.seed(seed)
     unittest.main()
+
