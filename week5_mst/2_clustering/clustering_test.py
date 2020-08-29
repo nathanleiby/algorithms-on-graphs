@@ -38,8 +38,9 @@ in2 = """
 out2 = round(5.000000000, 7)
 
 # TODO: Try running some tests at scale.
-# 1 ≤ 𝑛 ≤ 200; −10**3 ≤ 𝑥𝑖, 𝑦𝑖 ≤ 10**3 are integers.
-
+# 2 ≤ 𝑘 ≤ 𝑛 ≤ 200;
+# −10**3 ≤ 𝑥𝑖, 𝑦𝑖 ≤ 10**3 are integers.
+# All points are pairwise different
 
 class Test(unittest.TestCase):
     def test_examples(self):

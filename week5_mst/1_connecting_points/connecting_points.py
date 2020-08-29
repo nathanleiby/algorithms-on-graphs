@@ -72,9 +72,10 @@ def _get_lightest_edge(adj, costs, mst_v):
 
 
 def prim(adj, costs):
+    # TODO: Return the list of edges instead, and compute cost externally
     # "repeatedly attach a new vertex to the tree by the lightest edge"
     mst_v = set()
-    mst_e = set()  # TODO: Do we care about tracking the edges in this tree
+    mst_e = set()
     total_cost = 0
 
     # initialize with a random starting vertex
@@ -93,6 +94,7 @@ def prim(adj, costs):
 
 def kruskal(adj, costs):
     # "repeatedly add the next lightest edge that doesn't produce a cycle"
+    # TODO: Also implement Kruskal
     return []
 
 
