@@ -17,6 +17,7 @@ func (e Edge) String() string {
 }
 
 // Vertex is a node in the graph
+// TODO: Could refactor to `type Vertex int64` to remove lots of unnecessay complexity in my code
 type Vertex struct {
 	ID int64
 }

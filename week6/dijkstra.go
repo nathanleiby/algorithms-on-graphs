@@ -5,11 +5,11 @@ import (
 	"math"
 )
 
-// DistanceEstimates tracks the distance estimates while running Dijkstra's
-type DistanceEstimates map[Vertex]float64
-
 // Previous tracks the previous vertex in the Path
 type Previous map[Vertex]*Vertex
+
+// Distance tracks our distance estimates
+type Distance map[Vertex]float64
 
 // Visited tracks visited vertices
 type Visited map[Vertex]bool
@@ -19,23 +19,30 @@ func Dijkstra(g GraphIface, src, dst Vertex) (Path, error) {
 	// Create a 'visited' map to track visited vertices. initialize to empty map.
 	visited := Visited{}
 
-	// Create a 'distance' map. initialize all vertices with value of infinity
-	vertices := g.Vertices()
-	distance := DistanceEstimates{}
+	// Create a 'distance' map. initialize all vertices with value of infinity. Also create a PQ for optimized lookup
+	// Create a 'previous' map so we can reconstruct the shortest path
 	previous := Previous{}
-	for _, v := range vertices {
-		distance[v] = math.Inf(1)
+	distance := Distance{}
+	pq := NewPriorityQueue()
+	for _, v := range g.Vertices() {
+		pq.Insert(v, math.Inf(1))
+		updateDistance(v, math.Inf(1), pq, distance)
 		previous[v] = nil
 	}
-	// Set distance to src to = 0
-	distance[src] = 0
+
+	// Set distance to src to 0
+	updateDistance(src, 0, pq, distance)
 
 	// While some vertices are unvisited and we haven't added dst to visited yet
-	for i := 0; i < len(vertices); i++ {
-		//	pick the vertex in 'distance' with the minimum value
-		minVertex := getMinVertex(distance, visited)
+	for pq.Len() > 0 {
+		//	get the unvistied vertex with minimum distance estimate
+		minVertex := getMinVertex(pq)
+		if visited[minVertex] {
+			continue
+		}
+
 		//  relax its edges
-		relax(minVertex, g, distance, previous)
+		relax(minVertex, g, pq, distance, previous)
 
 		//  add vertex to visited
 		visited[minVertex] = true
@@ -49,31 +56,31 @@ func Dijkstra(g GraphIface, src, dst Vertex) (Path, error) {
 	return constructPath(g, previous, src, dst)
 }
 
-// TODO: use a heap or pQueue
-// https://golang.org/pkg/container/heap/
-func getMinVertex(distance DistanceEstimates, visited Visited) Vertex {
-	minValue := math.Inf(1)
-	var minVertex Vertex
-	for vertex, value := range distance {
-		if value < minValue && !visited[vertex] {
-			minVertex = vertex
-			minValue = value
-		}
+func getMinVertex(pq PriorityQueue) Vertex {
+	v, err := pq.Pop()
+	if err != nil {
+		panic(err)
 	}
-	return minVertex
+	return v.(Vertex)
 }
 
-func relax(v Vertex, g GraphIface, distance DistanceEstimates, previous Previous) {
+func relax(v Vertex, g GraphIface, pq PriorityQueue, distance Distance, previous Previous) {
 	// get neighbors for vertex
 	edges := getEdgesForVertex(v, g)
 	for _, e := range edges {
 		// if we can improve the estimate, do so
+		curDistance := distance[e.Destination]
 		distanceViaV := distance[v] + e.Weight
-		if distanceViaV < distance[e.Destination] {
-			distance[e.Destination] = distanceViaV
+		if distanceViaV < curDistance {
+			updateDistance(e.Destination, distanceViaV, pq, distance)
 			previous[e.Destination] = &v
 		}
 	}
+}
+
+func updateDistance(v Vertex, value float64, pq PriorityQueue, distance Distance) {
+	pq.UpdatePriority(v, value)
+	distance[v] = value
 }
 
 func getEdgesForVertex(v Vertex, g GraphIface) []Edge {
