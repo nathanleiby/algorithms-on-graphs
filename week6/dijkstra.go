@@ -66,7 +66,7 @@ func getMinVertex(pq PriorityQueue) Vertex {
 
 func relax(v Vertex, g GraphIface, pq PriorityQueue, distance Distance, previous Previous) {
 	// get neighbors for vertex
-	edges := getEdgesForVertex(v, g)
+	edges := g.GetNeighbors(v)
 	for _, e := range edges {
 		// if we can improve the estimate, do so
 		curDistance := distance[e.Destination]
@@ -81,16 +81,6 @@ func relax(v Vertex, g GraphIface, pq PriorityQueue, distance Distance, previous
 func updateDistance(v Vertex, value float64, pq PriorityQueue, distance Distance) {
 	pq.UpdatePriority(v, value)
 	distance[v] = value
-}
-
-func getEdgesForVertex(v Vertex, g GraphIface) []Edge {
-	edges := []Edge{}
-	for _, e := range g.Edges() {
-		if e.Source == v {
-			edges = append(edges, e)
-		}
-	}
-	return edges
 }
 
 func constructPath(g GraphIface, previous Previous, src Vertex, dst Vertex) (Path, error) {

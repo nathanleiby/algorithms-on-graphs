@@ -14,12 +14,13 @@ func TestDijkstra(t *testing.T) {
 	maxV := 10
 	v := make([]Vertex, maxV)
 	for i := 0; i < maxV; i++ {
-		v[i] = Vertex{ID: int64(i)}
+		v[i] = Vertex(i)
 	}
 
 	trivialGraph := EdgeList{
 		Edge{v[0], v[1], 1},
 	}
+
 	smallGraph := EdgeList{
 		Edge{v[0], v[1], 1},
 		Edge{v[1], v[2], 1},
@@ -45,9 +46,29 @@ func TestDijkstra(t *testing.T) {
 			wantErr: false,
 		},
 		{
+			name: "trivial path (adj list graph)",
+			args: args{
+				g:   convertEdgeListToAdjacencyList(trivialGraph),
+				src: v[0],
+				dst: v[1],
+			},
+			want:    Path{trivialGraph[0]},
+			wantErr: false,
+		},
+		{
 			name: "small path",
 			args: args{
 				g:   smallGraph,
+				src: v[0],
+				dst: v[3],
+			},
+			want:    Path{smallGraph[0], smallGraph[1], smallGraph[2]},
+			wantErr: false,
+		},
+		{
+			name: "small path (adj list graph)",
+			args: args{
+				g:   convertEdgeListToAdjacencyList(smallGraph),
 				src: v[0],
 				dst: v[3],
 			},
@@ -76,5 +97,16 @@ func TestDijkstra(t *testing.T) {
 				t.Errorf("Dijkstra() = %v, want %v", got, tt.want)
 			}
 		})
+		// algo := "AStar"
+		// t.Run(tt.name + " [AStar]", func(t *testing.T) {
+		// 	got, err := AStar(tt.args.g, tt.args.src, tt.args.dst)
+		// 	if (err != nil) != tt.wantErr {
+		// 		t.Errorf("%s() error = %v, wantErr %v", algo, err, tt.wantErr)
+		// 		return
+		// 	}
+		// 	if !reflect.DeepEqual(got, tt.want) {
+		// 		t.Errorf("%s() = %v, want %v", algo, got, tt.want)
+		// 	}
+		// })
 	}
 }
